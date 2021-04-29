@@ -3,6 +3,9 @@ from sklearn.base import BaseEstimator, TransformerMixin
 
 
 class GroupTailTransformer(BaseEstimator, TransformerMixin):
+    """
+    Class is used to group outliers of numerical distribution.
+    """
     def __init__(self, threshold=0.97):
         self.bounds = {}
         self.threshold = threshold
@@ -15,5 +18,5 @@ class GroupTailTransformer(BaseEstimator, TransformerMixin):
     def transform(self, x: pd.DataFrame):
         for col in self.bounds:
             b = self.bounds[col]
-            x[col] = x[col].apply(lambda x: b if x > b else x)
+            x[col] = x[col].apply(lambda v: b if v > b else v)
         return x.to_numpy()
