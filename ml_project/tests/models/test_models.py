@@ -1,16 +1,18 @@
 from typing import List
 
 import pytest
-from sklearn.ensemble import RandomForestClassifier
+from numpy.testing import assert_allclose
 
 from src.entities import (
     FeatureParams, TrainingParams
 )
 from src.features.build_features import (
-    make_features, extract_target, build_transformer,
+    extract_target, build_transformer,
 )
 from src.models import (
-    train_model, evaluate_model, predict_model,
+    train_model, evaluate_model,
+    predict_model, build_model,
+    serialize_model, load_model,
 )
 
 
@@ -40,20 +42,26 @@ def tmp_training_params():
     return params
 
 
-def test_model_train_predict_evaluate(
+def test_model_functions(
+        tmpdir,
         tmp_dataset,
         tmp_training_params,
         feature_params):
     transformer = build_transformer(feature_params)
-    transformer.fit(tmp_dataset)
-    features = make_features(transformer, tmp_dataset)
     target = extract_target(tmp_dataset, feature_params)
 
-    model = train_model(features, target, train_params=tmp_training_params)
-    isinstance(model, RandomForestClassifier)
+    model = build_model(transformer, train_params=tmp_training_params)
+    model = train_model(model, tmp_dataset, target)
 
-    train_pred = predict_model(model, features)
+    train_pred = predict_model(model, tmp_dataset)
+
     assert train_pred.shape[0] == target.shape[0]
+
+    model_path = tmpdir.join('model.pkl')
+    serialize_model(model, model_path)
+    loaded_model = load_model(model_path)
+    loaded_model_pred = predict_model(loaded_model, tmp_dataset)
+    assert_allclose(train_pred, loaded_model_pred)
 
     metrics = evaluate_model(train_pred, target)
     assert metrics["roc_auc"] > 0

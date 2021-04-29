@@ -5,7 +5,7 @@ from numpy.testing import assert_allclose
 
 from src.entities.feature_params import FeatureParams
 from src.features.build_features import (
-    make_features, extract_target, build_transformer,
+    extract_target, build_transformer,
     build_categorical_pipeline, build_numerical_pipeline,
     build_numerical_grouped_pipeline,
 )
@@ -27,12 +27,11 @@ def tmp_feature_params(
     return params
 
 
-def test_make_features(
+def test_build_transformer(
         tmp_feature_params: FeatureParams, tmp_dataset,
 ):
     transformer = build_transformer(tmp_feature_params)
-    transformer.fit(tmp_dataset)
-    features = make_features(transformer, tmp_dataset)
+    features = transformer.fit_transform(tmp_dataset)
     assert features.shape[1] == 30, (
         f"Its expected to have 30 features after transformer, got {features.shape[1]}"
     )

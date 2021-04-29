@@ -2,7 +2,7 @@ from typing import List
 
 import pytest
 
-from train_pipeline import train_pipeline
+from src.train_pipeline import train_pipeline
 from src.entities import (
     TrainingPipelineParams,
     SplittingParams,
