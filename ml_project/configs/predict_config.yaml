@@ -1,0 +1,4 @@
+input_data_path: "data/raw/heart.csv"
+model_path: "models/model.pkl"
+output_path: "predictions.csv"
+
