@@ -1,7 +1,9 @@
 Task description:
 https://data.mail.ru/blog/topic/view/18768/
 
-Usage (from online_inference dir):
+# Usage
+# python:
+(from online_inference dir):
 how to run app:
 ~~~
 python -m src.app
@@ -15,7 +17,7 @@ tests:
 pytest tests
 ~~~
 
-Docker:
+# Docker:
 Build command:
 ~~~
 docker build -t dronovartem/inference:v1 .
