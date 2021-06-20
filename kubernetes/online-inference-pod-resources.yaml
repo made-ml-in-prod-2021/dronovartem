@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: online-inference
+  labels:
+    app: online-inference
+spec:
+  containers:
+    - image: dronovartem/inference:v1
+      name: online-inference
+      ports:
+        - containerPort: 8000
+      resources:
+        requests:
+          memory: "128Mi"
+          cpu: "500m"
+        limits:
+          memory: "256Mi"
+          cpu: "800m"
